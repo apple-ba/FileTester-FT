@@ -70,3 +70,7 @@
 
 代码编辑器：VS2019+MFC
 
+## 下载问题
+
+为了解决raw.githubusercontent.com无法访问问题，在[gitee.com](https://gitee.com/apple-ba/FileTester-FT/)有一个相同的项目，供参考。
+
