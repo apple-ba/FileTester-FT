@@ -30,11 +30,11 @@
 
 解决方案是`FileTester-FT/test.sln`，下载后即可打开，但与项目文件夹的相对位置不能改变；打开后可以生成。
 
-项目文件夹是[`FileTester-FT/test/`](FileTester-FT/test/)文件夹，这个文件夹下的`test.vcxproj`是项目文件。
+项目文件夹是`FileTester-FT/test/`文件夹，这个文件夹下的`test.vcxproj`是项目文件。
 
 ### 已生成的文件
 
-已生成的文件放在[`FileTester-FT/executable files/`](FileTester-FT/executable files/)文件夹下，详细信息见`FileTester-FT/executable files/README.md`，这里不再重复。
+已生成的文件放在`FileTester-FT/executable files/`文件夹下，详细信息见`FileTester-FT/executable files/README.md`，这里不再重复。
 
 ## 使用方法
 
