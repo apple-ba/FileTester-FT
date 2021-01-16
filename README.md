@@ -45,10 +45,6 @@
 
 ### version 1.0.0.1
 
-[下载源码 从 gitee.com](https://gitee.com/apple-ba/FileTester-FT/repository/archive/v1.0.0.1%E5%8F%91%E5%B8%83.zip)
-
-[下载程序 从 gitee.com](https://gitee.com/apple-ba/FileTester-FT/raw/master/v1.0.0.1.exe)
-
 完成于2021年1月。
 
 #### 包含了基础的功能：
