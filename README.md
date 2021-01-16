@@ -77,5 +77,5 @@
 
 ## 下载问题
 
-为了解决raw.githubusercontent.com无法访问问题，在[gitee.com](https://gitee.com/apple-ba/FileTester-FT/)有一个类似的项目但结构不同，供参考。
+为了解决raw.githubusercontent.com无法访问问题，在[gitee.com](https://gitee.com/apple-ba/FileTester-FT/)有一个类似的项目，供参考。
 
