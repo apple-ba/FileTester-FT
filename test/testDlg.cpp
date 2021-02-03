@@ -95,7 +95,7 @@ void CtestDlg::OnBnClickedOk()
 	// TODO: 在此添加控件通知处理程序代码
 	CEdit* pEdit;
 	CString sss;
-	
+
 	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_path);
 	pEdit->GetWindowText(sss);
 	int lenpath = WideCharToMultiByte(CP_ACP, 0, sss, sss.GetLength(), NULL, 0, NULL, NULL);
@@ -110,7 +110,7 @@ void CtestDlg::OnBnClickedOk()
 	char* pCharExe = new char[(long long)lenexe + 2];
 	WideCharToMultiByte(CP_ACP, 0, sss, sss.GetLength(), pCharExe, lenexe, NULL, NULL);
 	pCharExe[(long long)lenexe + 1] = '\0';
-	
+
 
 	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_ioname);
 	pEdit->GetWindowText(sss);
@@ -119,7 +119,7 @@ void CtestDlg::OnBnClickedOk()
 	WideCharToMultiByte(CP_ACP, 0, sss, sss.GetLength(), pCharIoname, lenioname, NULL, NULL);
 	pCharIoname[(long long)lenioname + 1] = '\0';
 
-	char* pCharInputName = new char[lenioname + 6];
+	char* pCharInputName = new char[(long long)lenioname + 6];
 	for (int i = 0; i < lenioname; i++)pCharInputName[i] = pCharIoname[i];
 	pCharInputName[lenioname] = '.';
 	pCharInputName[lenioname + 1] = 'i';
@@ -136,7 +136,7 @@ void CtestDlg::OnBnClickedOk()
 	pCharInput[(long long)leninput + 1] = '\0';
 
 	fout << pCharInput;
-	
+
 	fout.close();
 	char* pCharExeFull = new char[(long long)lenpath + lenexe + 20];
 	pCharExeFull[0] = '\"';
@@ -160,10 +160,10 @@ void CtestDlg::OnBnClickedOk()
 
 
 	ifstream fin(pCharOutput);
-	
+
 	char ss;
 	sss = _T("");
-	while (fin>>ss) {
+	while (fin >> ss) {
 		CString ssss;
 		if (ss == '\n')
 			ssss.Format(_T("\r\n"));
@@ -174,21 +174,14 @@ void CtestDlg::OnBnClickedOk()
 	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_output);
 	pEdit->SetWindowText(sss);
 
-	char* pCharDelete = new char[(long long)lenioname + 9];
-	pCharDelete[0] = 'd';
-	pCharDelete[1] = 'e';
-	pCharDelete[2] = 'l';
-	pCharDelete[3] = ' ';
-	for (int i = 4; i < lenioname + 4; i++)pCharDelete[i] = pCharIoname[i - 4];
-	pCharDelete[lenioname + 4] = '.';
-	pCharDelete[lenioname + 5] = 'i';
-	pCharDelete[lenioname + 6] = 'n';
-	pCharDelete[lenioname + 7] = '\0';
-	system(pCharDelete);
-	pCharDelete[lenioname + 5] = 'o';
-	pCharDelete[lenioname + 6] = 'u';
-	pCharDelete[lenioname + 7] = 't';
-	pCharDelete[lenioname + 8] = '\0';
-	system(pCharDelete);
+	fin.close();
+
+	ofstream fout2("temp.bat");
+	fout2 << "@echo off" << endl;
+	fout2 << "del \"" << pCharInputName << "\"" << endl;
+	fout2 << "del \"" << pCharOutput << "\"" << endl;
+	fout2.close();
+	system("temp.bat");
+	system("del temp.bat");
 	return;
 }
