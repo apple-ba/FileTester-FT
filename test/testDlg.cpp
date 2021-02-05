@@ -89,116 +89,83 @@ HCURSOR CtestDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-static void UnicodeToAnsi(const wchar_t* srcStr, char* destStr, const UINT& nMaxBytesToConvert) {
+char* UnicodeToAnsi(CString unicode) {
+	wchar_t* srcStr = unicode.AllocSysString();
 	int nLen = WideCharToMultiByte(CP_ACP, 0, srcStr, -1, NULL, 0, NULL, NULL);
 	if (nLen) {
 		char* p = new char[nLen];
 		WideCharToMultiByte(CP_ACP, 0, srcStr, -1, p, nLen, NULL, NULL);
-		strcpy_s(destStr, nMaxBytesToConvert, p);
-		free(p);
+		return p;
 	}
 }
-static void AnsiToUnicode(const char* srcStr, wchar_t* destStr, const UINT& nMaxBytesToConvert) {
+CString AnsiToUnicode(const char* srcStr) {
+	wchar_t* destStr;
 	int nLen = MultiByteToWideChar(CP_ACP, 0, srcStr, -1, NULL, 0);
 	if (nLen) {
 		wchar_t* pUnicode = new wchar_t[nLen];
 		MultiByteToWideChar(CP_ACP, 0, srcStr, -1, pUnicode, nLen);
-		wcscpy_s(destStr, nMaxBytesToConvert, pUnicode);
-		free(pUnicode);
+		return CString(pUnicode);
 	}
 }
 
 void CtestDlg::OnBnClickedOk()
 {
 	// TODO: 在此添加控件通知处理程序代码
+
+	//控件指针
 	CEdit* pEdit;
-	CString sss;
 
+	//读入路径控件值
+	CString pCharPath;
 	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_path);
-	pEdit->GetWindowText(sss);
-	int lenpath = WideCharToMultiByte(CP_ACP, 0, sss, sss.GetLength(), NULL, 0, NULL, NULL);
-	char* pCharPath = new char[(long long)lenpath + 2];
-	WideCharToMultiByte(CP_ACP, 0, sss, sss.GetLength(), pCharPath, lenpath, NULL, NULL);
-	pCharPath[(long long)lenpath + 1] = '\0';
+	pEdit->GetWindowText(pCharPath);
 
-
+	//读入程序名称控件值
+	CString pCharExe;
 	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_exename);
-	pEdit->GetWindowText(sss);
-	int lenexe = WideCharToMultiByte(CP_ACP, 0, sss, sss.GetLength(), NULL, 0, NULL, NULL);
-	char* pCharExe = new char[(long long)lenexe + 2];
-	WideCharToMultiByte(CP_ACP, 0, sss, sss.GetLength(), pCharExe, lenexe, NULL, NULL);
-	pCharExe[(long long)lenexe + 1] = '\0';
+	pEdit->GetWindowText(pCharExe);
 
-
+	//读入输入输出文件名称控件值
+	CString pCharIoname;
 	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_ioname);
-	pEdit->GetWindowText(sss);
-	int lenioname = WideCharToMultiByte(CP_ACP, 0, sss, sss.GetLength(), NULL, 0, NULL, NULL);
-	char* pCharIoname = new char[(long long)lenioname + 2];
-	WideCharToMultiByte(CP_ACP, 0, sss, sss.GetLength(), pCharIoname, lenioname, NULL, NULL);
-	pCharIoname[(long long)lenioname + 1] = '\0';
+	pEdit->GetWindowText(pCharIoname);
 
-	char* pCharInputName = new char[(long long)lenioname + 6];
-	for (int i = 0; i < lenioname; i++)pCharInputName[i] = pCharIoname[i];
-	pCharInputName[lenioname] = '.';
-	pCharInputName[lenioname + 1] = 'i';
-	pCharInputName[lenioname + 2] = 'n';
-	pCharInputName[lenioname + 3] = '\0';
-	ofstream fout(pCharInputName);
-
-
+	//生成输入文件
+	ofstream fout(UnicodeToAnsi(pCharIoname + _T(".in")));//文件流
+	CString pCharInput;//文件内容
 	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_input);
-	pEdit->GetWindowText(sss);
-	int leninput = WideCharToMultiByte(CP_ACP, 0, sss, sss.GetLength(), NULL, 0, NULL, NULL);
-	char* pCharInput = new char[(long long)leninput + 2];
-	WideCharToMultiByte(CP_ACP, 0, sss, sss.GetLength(), pCharInput, leninput, NULL, NULL);
-	pCharInput[(long long)leninput + 1] = '\0';
-
-	fout << pCharInput;
-
-	fout.close();
-	char* pCharExeFull = new char[(long long)lenpath + lenexe + 20];
-	pCharExeFull[0] = '\"';
-	for (int i = 1; i <= lenpath; i++)pCharExeFull[i] = pCharPath[i - 1];
-	for (int i = lenpath + 1; i <= lenpath + lenexe; i++)pCharExeFull[i] = pCharExe[i - lenpath - 1];
-	pCharExeFull[lenpath + lenexe + 1] = '.';
-	pCharExeFull[lenpath + lenexe + 2] = 'e';
-	pCharExeFull[lenpath + lenexe + 3] = 'x';
-	pCharExeFull[lenpath + lenexe + 4] = 'e';
-	pCharExeFull[lenpath + lenexe + 5] = '\"';
-	pCharExeFull[lenpath + lenexe + 6] = '\0';
-	system(pCharExeFull);
-
-	char* pCharOutput = new char[(long long)lenioname + 6];
-	for (int i = 0; i < lenioname; i++)pCharOutput[i] = pCharIoname[i];
-	pCharOutput[lenioname] = '.';
-	pCharOutput[lenioname + 1] = 'o';
-	pCharOutput[lenioname + 2] = 'u';
-	pCharOutput[lenioname + 3] = 't';
-	pCharOutput[lenioname + 4] = '\0';
-
-
-	ifstream fin(pCharOutput);
-
+	pEdit->GetWindowText(pCharInput);//读入输入控件值
+	fout << UnicodeToAnsi(pCharInput) << endl;//转为ANSI文件
+	fout.close();//保存关闭文件
+	
+	//运行被测试文件
+	CString pCharExeFull;
+	pCharExeFull = pCharPath;
+	if (UnicodeToAnsi(pCharPath)[pCharPath.GetLength() - 1] != '\\')pCharExeFull += _T("\\");//补全路径末尾反斜杠
+	pCharExeFull += pCharExe;
+	system(UnicodeToAnsi(pCharExeFull));//执行程序
+	
+	//读入输出文件
+	ifstream fin(UnicodeToAnsi(pCharIoname+_T(".out")));//文件流
+	CString pCharOutput;
 	char ss[1024];
-	sss = _T("");
+	pCharOutput = _T("");
 	while (fin.getline(ss,1024)) {
-		wchar_t t[1024];
-		AnsiToUnicode(ss, t , 500);
-		CString ssss=CString(t);
+		CString ssss = AnsiToUnicode(ss);
 		ssss += _T("\r\n");
-		sss += ssss;
-	}
+		pCharOutput += ssss;
+	}//读入
 	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_output);
-	pEdit->SetWindowText(sss);
+	pEdit->SetWindowText(pCharOutput);//设置输出控件值
+	fin.close();//关闭文件
 
-	fin.close();
-
+	//生成删除临时文件脚本
 	ofstream fout2("temp.bat");
 	fout2 << "@echo off" << endl;
-	fout2 << "del \"" << pCharInputName << "\"" << endl;
-	fout2 << "del \"" << pCharOutput << "\"" << endl;
+	fout2 << "del \"" << UnicodeToAnsi(pCharIoname + _T(".in")) << "\"" << endl;
+	fout2 << "del \"" << UnicodeToAnsi(pCharIoname + _T(".out")) << "\"" << endl;
 	fout2.close();
-	system("temp.bat");
-	system("del temp.bat");
+	system("temp.bat");//执行
+	system("del temp.bat");//删除脚本
 	return;
 }
