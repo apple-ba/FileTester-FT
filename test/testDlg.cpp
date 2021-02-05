@@ -8,6 +8,7 @@
 #include "testDlg.h"
 #include "afxdialogex.h"
 #include <fstream>
+#include <string>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -88,7 +89,24 @@ HCURSOR CtestDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-
+static void UnicodeToAnsi(const wchar_t* srcStr, char* destStr, const UINT& nMaxBytesToConvert) {
+	int nLen = WideCharToMultiByte(CP_ACP, 0, srcStr, -1, NULL, 0, NULL, NULL);
+	if (nLen) {
+		char* p = new char[nLen];
+		WideCharToMultiByte(CP_ACP, 0, srcStr, -1, p, nLen, NULL, NULL);
+		strcpy_s(destStr, nMaxBytesToConvert, p);
+		free(p);
+	}
+}
+static void AnsiToUnicode(const char* srcStr, wchar_t* destStr, const UINT& nMaxBytesToConvert) {
+	int nLen = MultiByteToWideChar(CP_ACP, 0, srcStr, -1, NULL, 0);
+	if (nLen) {
+		wchar_t* pUnicode = new wchar_t[nLen];
+		MultiByteToWideChar(CP_ACP, 0, srcStr, -1, pUnicode, nLen);
+		wcscpy_s(destStr, nMaxBytesToConvert, pUnicode);
+		free(pUnicode);
+	}
+}
 
 void CtestDlg::OnBnClickedOk()
 {
@@ -161,14 +179,13 @@ void CtestDlg::OnBnClickedOk()
 
 	ifstream fin(pCharOutput);
 
-	char ss;
+	char ss[1024];
 	sss = _T("");
-	while (fin >> ss) {
-		CString ssss;
-		if (ss == '\n')
-			ssss.Format(_T("\r\n"));
-		else
-			ssss.Format(_T("%c"), ss);
+	while (fin.getline(ss,1024)) {
+		wchar_t t[1024];
+		AnsiToUnicode(ss, t , 500);
+		CString ssss=CString(t);
+		ssss += _T("\r\n");
 		sss += ssss;
 	}
 	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_output);
