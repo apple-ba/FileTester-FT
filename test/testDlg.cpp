@@ -7,6 +7,7 @@
 #include "test.h"
 #include "testDlg.h"
 #include "afxdialogex.h"
+#include "batch.h"
 #include <fstream>
 #include <string>
 
@@ -35,6 +36,9 @@ BEGIN_MESSAGE_MAP(CtestDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDOK, &CtestDlg::OnBnClickedOk)
+	ON_BN_CLICKED(IDC_CLEAROUTPUT, &CtestDlg::OnBnClickedClearoutput)
+	ON_BN_CLICKED(IDC_CLEARINPUT, &CtestDlg::OnBnClickedClearinput)
+	ON_BN_CLICKED(IDC_BUTTON_CHANGE, &CtestDlg::OnBnClickedButtonChange)
 END_MESSAGE_MAP()
 
 
@@ -111,7 +115,8 @@ CString AnsiToUnicode(const char* srcStr) {
 void CtestDlg::OnBnClickedOk()
 {
 	// TODO: 在此添加控件通知处理程序代码
-
+	CButton* ok = (CButton*)GetDlgItem(IDOK);
+	ok->EnableWindow(FALSE);//禁止再次启动测试
 	//控件指针
 	CEdit* pEdit;
 
@@ -167,5 +172,55 @@ void CtestDlg::OnBnClickedOk()
 	fout2.close();
 	system("temp.bat");//执行
 	system("del temp.bat");//删除脚本
+
+	ok->EnableWindow(TRUE);//允许测试
 	return;
+}
+
+
+void CtestDlg::OnBnClickedClearoutput()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_output);
+	pEdit->SetWindowText(_T(""));
+	return;
+}
+
+
+void CtestDlg::OnBnClickedClearinput()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_input);
+	pEdit->SetWindowText(_T(""));
+	return;
+}
+
+
+void CtestDlg::OnBnClickedButtonChange()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	this->ShowWindow(SW_HIDE);//隐藏自己
+	batch* pDlg = new batch();
+	pDlg->Create(IDD_BATCHTEST_DIALOG); //创建一个非模态对话框  
+	pDlg->ShowWindow(SW_SHOWNORMAL); //显示非模态对话框  
+}
+
+BOOL CtestDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN)
+	{
+		switch (pMsg->wParam)
+		{
+		case VK_RETURN:
+			return TRUE;
+
+		case VK_ESCAPE:
+			return TRUE;
+
+		default:
+			break;
+		}
+	}
+
+	return CDialog::PreTranslateMessage(pMsg);
 }
