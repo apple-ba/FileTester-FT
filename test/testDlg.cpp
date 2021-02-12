@@ -39,6 +39,7 @@ BEGIN_MESSAGE_MAP(CtestDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CLEAROUTPUT, &CtestDlg::OnBnClickedClearoutput)
 	ON_BN_CLICKED(IDC_CLEARINPUT, &CtestDlg::OnBnClickedClearinput)
 	ON_BN_CLICKED(IDC_BUTTON_CHANGE, &CtestDlg::OnBnClickedButtonChange)
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
@@ -223,4 +224,13 @@ BOOL CtestDlg::PreTranslateMessage(MSG* pMsg)
 	}
 
 	return CDialog::PreTranslateMessage(pMsg);
+}
+
+
+void CtestDlg::OnClose()
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+
+	CDialogEx::OnClose();
+	exit(0);
 }

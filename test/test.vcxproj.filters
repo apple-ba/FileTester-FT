@@ -36,6 +36,9 @@
     <ClInclude Include="batch.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="testing.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -48,6 +51,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="batch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="testing.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

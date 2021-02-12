@@ -190,6 +190,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="test.h" />
     <ClInclude Include="testDlg.h" />
+    <ClInclude Include="testing.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="batch.cpp" />
@@ -201,6 +202,7 @@
     </ClCompile>
     <ClCompile Include="test.cpp" />
     <ClCompile Include="testDlg.cpp" />
+    <ClCompile Include="testing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="test.rc" />

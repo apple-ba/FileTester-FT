@@ -19,8 +19,13 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
+protected:
+	HICON m_hIcon;
+
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnClose();
 	BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnBnClickedButtonChange();
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 };

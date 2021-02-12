@@ -36,4 +36,5 @@ public:
 	afx_msg void OnBnClickedClearinput();
 	afx_msg void OnBnClickedButtonChange();
 	BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnClose();
 };
