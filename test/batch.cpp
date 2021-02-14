@@ -31,12 +31,37 @@ void batch::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(batch, CDialogEx)
 	ON_WM_CLOSE()
     ON_BN_CLICKED(IDC_BUTTON_CHANGE, &batch::OnBnClickedButtonChange)
-    ON_WM_CREATE()
+    ON_BN_CLICKED(IDC_BUTTON_TEST, &batch::OnBnClickedButtonTest)
+    ON_BN_CLICKED(IDC_BUTTON_HELP, &batch::OnBnClickedButtonHelp)
 END_MESSAGE_MAP()
 
 
 // batch 消息处理程序
-
+BOOL batch::OnInitDialog() {
+    CDialogEx::OnInitDialog();
+    SetIcon(m_hIcon, TRUE);			// 设置大图标
+    SetIcon(m_hIcon, FALSE);		// 设置小图标
+    CComboBox* pCombo = (CComboBox*)GetDlgItem(IDC_COMBO_NUMBER_CHOOSE);
+    pCombo->AddString(_T("x"));
+    pCombo->AddString(_T("xx"));
+    pCombo->AddString(_T("xxx"));
+    pCombo->AddString(_T("xxxx"));
+    pCombo->SetCurSel(0);
+    pCombo = (CComboBox*)GetDlgItem(IDC_COMBO_INPUTFILENAME);
+    pCombo->AddString(_T(".in"));
+    pCombo->SetCurSel(0);
+    pCombo = (CComboBox*)GetDlgItem(IDC_COMBO_ANSWERFILENAME);
+    pCombo->AddString(_T(".ans"));
+    pCombo->AddString(_T(".out"));
+    pCombo->SetCurSel(0);
+    CSpinButtonCtrl* pSpin = (CSpinButtonCtrl*)GetDlgItem(IDC_SPIN1);
+    pSpin->SetRange32(0, 10000);
+    pSpin->SetBase(10);
+    CSpinButtonCtrl* pSpin = (CSpinButtonCtrl*)GetDlgItem(IDC_SPIN2);
+    pSpin->SetRange32(0, 10000);
+    pSpin->SetBase(10);
+    return TRUE;
+}
 
 
 void batch::OnClose()
@@ -76,13 +101,28 @@ void batch::OnBnClickedButtonChange()
 }
 
 
-int batch::OnCreate(LPCREATESTRUCT lpCreateStruct)
+
+
+void batch::OnBnClickedButtonTest()
 {
-    if (CDialogEx::OnCreate(lpCreateStruct) == -1)
-        return -1;
+    // TODO: 在此添加控件通知处理程序代码
+    CtestDlg* pDlg = new CtestDlg();
+    pDlg->Create(IDD_TESTING_DIALOG); //创建一个非模态对话框  
+    pDlg->ShowWindow(SW_SHOWNORMAL); //显示非模态对话框  
+}
 
-    // TODO:  在此添加您专用的创建代码
-    AfxGetMainWnd() - SendMessage(WM_SETICON, TRUE, (LPARAM)m_hIcon);
 
-    return 0;
+void batch::OnBnClickedButtonHelp()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    MessageBox(_T("\
+第一个编辑框填写程序里写的输入输出文件名称(不带后缀名)\n\
+第二个编辑框填写保留0的情况\n\
+第三个编辑框填写输入文件后缀\n\
+第四个编辑框填写答案文件后缀\n\
+例：\n\
+|apple|x|.in|.ans|\n\
+则输入文件名为apple0.in,apple1.in,apple2.in~\n\
+答案文件名为apple0.ans,apple1.ans,apple2.ans~\n\
+"), _T("帮助..."), MB_OK);
 }

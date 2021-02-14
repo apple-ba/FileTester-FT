@@ -191,6 +191,7 @@
     <ClInclude Include="test.h" />
     <ClInclude Include="testDlg.h" />
     <ClInclude Include="testing.h" />
+    <ClInclude Include="variables.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="batch.cpp" />

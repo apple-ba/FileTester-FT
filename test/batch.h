@@ -24,8 +24,12 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnClose();
+	afx_msg
+		BOOL OnInitDialog();
+	void OnClose();
 	BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnBnClickedButtonChange();
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+//	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnBnClickedButtonTest();
+	afx_msg void OnBnClickedButtonHelp();
 };
