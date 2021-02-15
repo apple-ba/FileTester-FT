@@ -8,6 +8,7 @@
 #include "testDlg.h"
 #include "afxdialogex.h"
 #include "batch.h"
+#include "variables.h"
 #include <fstream>
 #include <string>
 
@@ -40,6 +41,7 @@ BEGIN_MESSAGE_MAP(CtestDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CLEARINPUT, &CtestDlg::OnBnClickedClearinput)
 	ON_BN_CLICKED(IDC_BUTTON_CHANGE, &CtestDlg::OnBnClickedButtonChange)
 	ON_WM_CLOSE()
+	ON_EN_CHANGE(IDC_EDIT_path, &CtestDlg::OnEnChangeEditpath)
 END_MESSAGE_MAP()
 
 
@@ -94,24 +96,6 @@ HCURSOR CtestDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-char* UnicodeToAnsi(CString unicode) {
-	wchar_t* srcStr = unicode.AllocSysString();
-	int nLen = WideCharToMultiByte(CP_ACP, 0, srcStr, -1, NULL, 0, NULL, NULL);
-	if (nLen) {
-		char* p = new char[nLen];
-		WideCharToMultiByte(CP_ACP, 0, srcStr, -1, p, nLen, NULL, NULL);
-		return p;
-	}
-}
-CString AnsiToUnicode(const char* srcStr) {
-	wchar_t* destStr;
-	int nLen = MultiByteToWideChar(CP_ACP, 0, srcStr, -1, NULL, 0);
-	if (nLen) {
-		wchar_t* pUnicode = new wchar_t[nLen];
-		MultiByteToWideChar(CP_ACP, 0, srcStr, -1, pUnicode, nLen);
-		return CString(pUnicode);
-	}
-}
 
 void CtestDlg::OnBnClickedOk()
 {
@@ -233,4 +217,19 @@ void CtestDlg::OnClose()
 
 	CDialogEx::OnClose();
 	exit(0);
+}
+
+
+void CtestDlg::OnEnChangeEditpath()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
+	CString ss;
+	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_path);
+	pEdit->GetWindowText(ss);
+
 }

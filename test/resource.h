@@ -22,7 +22,6 @@
 #define IDC_BUTTON_HELP                 1026
 #define IDC_EDIT_FROM                   1027
 #define IDC_SPIN1                       1028
-#define IDC_EDIT_FROM2                  1029
 #define IDC_EDIT_TO                     1029
 #define IDC_SPIN2                       1030
 

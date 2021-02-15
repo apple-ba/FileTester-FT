@@ -32,4 +32,6 @@ public:
 //	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnBnClickedButtonTest();
 	afx_msg void OnBnClickedButtonHelp();
+	afx_msg void OnEnChangeEditFrom();
+	afx_msg void OnEnChangeEditTo();
 };

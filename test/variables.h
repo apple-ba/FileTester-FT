@@ -3,5 +3,11 @@
 #pragma once
 
 #include "pch.h"
+#include <string>
+using namespace std;
 
-CString 
+char* UnicodeToAnsi(CString);
+CString AnsiToUnicode(const char*);
+
+
+
