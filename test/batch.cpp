@@ -57,7 +57,7 @@ BOOL batch::OnInitDialog() {
     CSpinButtonCtrl* pSpin = (CSpinButtonCtrl*)GetDlgItem(IDC_SPIN1);
     pSpin->SetRange32(0, 10000);
     pSpin->SetBase(10);
-    CSpinButtonCtrl* pSpin = (CSpinButtonCtrl*)GetDlgItem(IDC_SPIN2);
+    pSpin = (CSpinButtonCtrl*)GetDlgItem(IDC_SPIN2);
     pSpin->SetRange32(0, 10000);
     pSpin->SetBase(10);
     return TRUE;
