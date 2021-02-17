@@ -34,4 +34,6 @@ public:
 	afx_msg void OnBnClickedButtonHelp();
 	afx_msg void OnEnChangeEditFrom();
 	afx_msg void OnEnChangeEditTo();
+	afx_msg void OnEnChangeEditpath();
+	afx_msg void OnEnChangeEditexename();
 };

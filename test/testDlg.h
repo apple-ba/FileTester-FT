@@ -38,4 +38,5 @@ public:
 	BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnClose();
 	afx_msg void OnEnChangeEditpath();
+	afx_msg void OnEnChangeEditexename();
 };

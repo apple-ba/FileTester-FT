@@ -42,6 +42,7 @@ BEGIN_MESSAGE_MAP(CtestDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_CHANGE, &CtestDlg::OnBnClickedButtonChange)
 	ON_WM_CLOSE()
 	ON_EN_CHANGE(IDC_EDIT_path, &CtestDlg::OnEnChangeEditpath)
+	ON_EN_CHANGE(IDC_EDIT_exename, &CtestDlg::OnEnChangeEditexename)
 END_MESSAGE_MAP()
 
 
@@ -57,6 +58,14 @@ BOOL CtestDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+
+	CString ss=AnsiToUnicode(sPath.c_str());
+	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_path);
+	pEdit->SetWindowText(ss);
+	ss = AnsiToUnicode(sPath.c_str());
+	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_exename);
+	pEdit->SetWindowText(ss);
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -231,5 +240,20 @@ void CtestDlg::OnEnChangeEditpath()
 	CString ss;
 	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_path);
 	pEdit->GetWindowText(ss);
+	string sPath = UnicodeToAnsi(ss);
+}
 
+
+void CtestDlg::OnEnChangeEditexename()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
+	CString ss;
+	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_exename);
+	pEdit->GetWindowText(ss);
+	sExename = UnicodeToAnsi(ss);
 }

@@ -6,8 +6,10 @@
 #include "batch.h"
 #include "afxdialogex.h"
 #include "testDlg.h"
+#include "testing.h"
 #include "variables.h"
 
+//定义variables.h中的声明过的变量
 char* UnicodeToAnsi(CString unicode) {
 	wchar_t* srcStr = unicode.AllocSysString();
 	int nLen = WideCharToMultiByte(CP_ACP, 0, srcStr, -1, NULL, 0, NULL, NULL);
@@ -26,6 +28,16 @@ CString AnsiToUnicode(const char* srcStr) {
 		return CString(pUnicode);
 	}
 }
+std::string sPath;
+std::string sExename;
+std::string sIoname;
+std::string sInput;
+std::string sOutput;
+int iFrom;
+int iTo;
+int iNumberChoose;
+std::string sInputFileName;
+std::string sAnswerFileName;
 // batch 对话框
 
 IMPLEMENT_DYNAMIC(batch, CDialogEx)
@@ -53,6 +65,8 @@ BEGIN_MESSAGE_MAP(batch, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_HELP, &batch::OnBnClickedButtonHelp)
 	ON_EN_CHANGE(IDC_EDIT_FROM, &batch::OnEnChangeEditFrom)
 	ON_EN_CHANGE(IDC_EDIT_TO, &batch::OnEnChangeEditTo)
+	ON_EN_CHANGE(IDC_EDIT_path, &batch::OnEnChangeEditpath)
+	ON_EN_CHANGE(IDC_EDIT_exename, &batch::OnEnChangeEditexename)
 END_MESSAGE_MAP()
 
 
@@ -61,13 +75,7 @@ BOOL batch::OnInitDialog() {
 	CDialogEx::OnInitDialog();
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
-	CComboBox* pCombo = (CComboBox*)GetDlgItem(IDC_COMBO_NUMBER_CHOOSE);
-	pCombo->AddString(_T("x"));
-	pCombo->AddString(_T("xx"));
-	pCombo->AddString(_T("xxx"));
-	pCombo->AddString(_T("xxxx"));
-	pCombo->SetCurSel(0);
-	pCombo = (CComboBox*)GetDlgItem(IDC_COMBO_INPUTFILENAME);
+	CComboBox* pCombo = (CComboBox*)GetDlgItem(IDC_COMBO_INPUTFILENAME);
 	pCombo->AddString(_T(".in"));
 	pCombo->SetCurSel(0);
 	pCombo = (CComboBox*)GetDlgItem(IDC_COMBO_ANSWERFILENAME);
@@ -82,6 +90,10 @@ BOOL batch::OnInitDialog() {
 	pSpin->SetBase(10);
 	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_path);
 	CString ss;
+	pEdit->SetWindowText(ss);
+
+	ss = AnsiToUnicode(sPath.c_str());
+	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_exename);
 	pEdit->SetWindowText(ss);
 	return TRUE;
 }
@@ -129,7 +141,7 @@ void batch::OnBnClickedButtonChange()
 void batch::OnBnClickedButtonTest()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	CtestDlg* pDlg = new CtestDlg();
+	testing* pDlg = new testing();
 	pDlg->Create(IDD_TESTING_DIALOG); //创建一个非模态对话框  
 	pDlg->ShowWindow(SW_SHOWNORMAL); //显示非模态对话框  
 }
@@ -198,4 +210,34 @@ void batch::OnEnChangeEditTo()
 			pEdit->SetWindowText(ss);
 		}
 	}
+}
+
+
+void batch::OnEnChangeEditpath()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
+	CString ss;
+	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_path);
+	pEdit->GetWindowText(ss);
+	sPath = UnicodeToAnsi(ss);
+}
+
+
+void batch::OnEnChangeEditexename()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
+	CString ss;
+	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_exename);
+	pEdit->GetWindowText(ss);
+	sExename = UnicodeToAnsi(ss);
 }
