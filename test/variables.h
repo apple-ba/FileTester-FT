@@ -1,9 +1,8 @@
-//储存变量
+//variables.h: 变量的头文件
 
 #pragma once
 
 #include "pch.h"
-#include <string>
 using namespace std;
 
 char* UnicodeToAnsi(CString);
@@ -14,6 +13,16 @@ extern string sExename;
 extern string sIoname;
 extern string sInput;
 extern string sOutput;
-extern int iFrom;
-extern int iTo;
+extern string sFrom;
+extern string sTo;
+extern string sNumberChoose;
+extern string sInputFileName;
+extern string sOutputFileName;
+extern string sAnswerFileName;
 
+void save(char*);
+
+void read(char*);
+
+#define _save() save("%APPDATA%\\FileTester\\temp.ftconfig")
+#define _read() read("%APPDATA%\\FileTester\\temp.ftconfig")

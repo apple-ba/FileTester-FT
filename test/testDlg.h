@@ -39,4 +39,11 @@ public:
 	afx_msg void OnClose();
 	afx_msg void OnEnChangeEditpath();
 	afx_msg void OnEnChangeEditexename();
+//	afx_msg void OnBnClickedButton1();
+	afx_msg void OnEnChangeEditioname();
+//	afx_msg void OnCbnSelchangeComboInputfilename();
+	afx_msg void OnCbnEditchangeComboInputfilename();
+	afx_msg void OnCbnEditchangeComboOutputfilename();
+	afx_msg void OnEnChangeEditinput();
+	afx_msg void OnEnChangeEditoutput();
 };

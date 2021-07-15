@@ -59,6 +59,9 @@
     <ClCompile Include="testing.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="variables.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="test.rc">

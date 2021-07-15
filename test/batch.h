@@ -29,11 +29,14 @@ public:
 	void OnClose();
 	BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnBnClickedButtonChange();
-//	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnBnClickedButtonTest();
-	afx_msg void OnBnClickedButtonHelp();
 	afx_msg void OnEnChangeEditFrom();
 	afx_msg void OnEnChangeEditTo();
 	afx_msg void OnEnChangeEditpath();
 	afx_msg void OnEnChangeEditexename();
+	afx_msg void OnEnChangeEditioname();
+	afx_msg void OnCbnEditchangeComboInputfilename();
+	afx_msg void OnCbnEditchangeComboOutputfilename();
+	afx_msg void OnCbnSelchangeComboAnswerfilename();
+	afx_msg void OnEnChangeEditNumberchoose();
 };

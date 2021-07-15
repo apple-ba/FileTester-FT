@@ -9,8 +9,6 @@
 #include "afxdialogex.h"
 #include "batch.h"
 #include "variables.h"
-#include <fstream>
-#include <string>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -43,6 +41,13 @@ BEGIN_MESSAGE_MAP(CtestDlg, CDialogEx)
 	ON_WM_CLOSE()
 	ON_EN_CHANGE(IDC_EDIT_path, &CtestDlg::OnEnChangeEditpath)
 	ON_EN_CHANGE(IDC_EDIT_exename, &CtestDlg::OnEnChangeEditexename)
+//	ON_BN_CLICKED(IDC_BUTTON1, &CtestDlg::OnBnClickedButton1)
+ON_EN_CHANGE(IDC_EDIT_ioname, &CtestDlg::OnEnChangeEditioname)
+//ON_CBN_SELCHANGE(IDC_COMBO_INPUTFILENAME, &CtestDlg::OnCbnSelchangeComboInputfilename)
+ON_CBN_EDITCHANGE(IDC_COMBO_INPUTFILENAME, &CtestDlg::OnCbnEditchangeComboInputfilename)
+ON_CBN_EDITCHANGE(IDC_COMBO_OUTPUTFILENAME, &CtestDlg::OnCbnEditchangeComboOutputfilename)
+ON_EN_CHANGE(IDC_EDIT_input, &CtestDlg::OnEnChangeEditinput)
+ON_EN_CHANGE(IDC_EDIT_output, &CtestDlg::OnEnChangeEditoutput)
 END_MESSAGE_MAP()
 
 
@@ -59,13 +64,36 @@ BOOL CtestDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 
-	CString ss=AnsiToUnicode(sPath.c_str());
-	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_path);
-	pEdit->SetWindowText(ss);
+	//初始化控件
+	CComboBox* pCombo = (CComboBox*)GetDlgItem(IDC_COMBO_INPUTFILENAME);
+	pCombo->AddString(_T(".in"));
+	pCombo = (CComboBox*)GetDlgItem(IDC_COMBO_OUTPUTFILENAME);
+	pCombo->AddString(_T(".out"));
+
+	//调出变量表中的值
+	CString ss;
+	CEdit* pEdit;
 	ss = AnsiToUnicode(sPath.c_str());
+	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_path);
+	pEdit->SetWindowText(ss);
+	ss = AnsiToUnicode(sExename.c_str());
 	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_exename);
 	pEdit->SetWindowText(ss);
-
+	ss = AnsiToUnicode(sIoname.c_str());
+	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_ioname);
+	pEdit->SetWindowText(ss);
+	ss = AnsiToUnicode(sInputFileName.c_str());
+	pEdit = (CEdit*)GetDlgItem(IDC_COMBO_INPUTFILENAME);
+	pEdit->SetWindowText(ss);
+	ss = AnsiToUnicode(sOutputFileName.c_str());
+	pEdit = (CEdit*)GetDlgItem(IDC_COMBO_OUTPUTFILENAME);
+	pEdit->SetWindowText(ss);
+	ss = AnsiToUnicode(sInput.c_str());
+	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_input);
+	pEdit->SetWindowText(ss);
+	ss = AnsiToUnicode(sOutput.c_str());
+	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_output);
+	pEdit->SetWindowText(ss);
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -105,47 +133,28 @@ HCURSOR CtestDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-
+//测试
 void CtestDlg::OnBnClickedOk()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	CButton* ok = (CButton*)GetDlgItem(IDOK);
 	ok->EnableWindow(FALSE);//禁止再次启动测试
-	//控件指针
-	CEdit* pEdit;
-
-	//读入路径控件值
-	CString pCharPath;
-	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_path);
-	pEdit->GetWindowText(pCharPath);
-
-	//读入程序名称控件值
-	CString pCharExe;
-	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_exename);
-	pEdit->GetWindowText(pCharExe);
-
-	//读入输入输出文件名称控件值
-	CString pCharIoname;
-	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_ioname);
-	pEdit->GetWindowText(pCharIoname);
+	
 
 	//生成输入文件
-	ofstream fout(UnicodeToAnsi(pCharIoname + _T(".in")));//文件流
-	CString pCharInput;//文件内容
-	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_input);
-	pEdit->GetWindowText(pCharInput);//读入输入控件值
-	fout << UnicodeToAnsi(pCharInput) << endl;//转为ANSI文件
+	ofstream fout(sIoname + sInputFileName);//文件流
+	fout << sInput << endl;
 	fout.close();//保存关闭文件
 	
 	//运行被测试文件
-	CString pCharExeFull;
-	pCharExeFull = pCharPath;
-	if (UnicodeToAnsi(pCharPath)[pCharPath.GetLength() - 1] != '\\')pCharExeFull += _T("\\");//补全路径末尾反斜杠
-	pCharExeFull += pCharExe;
-	system(UnicodeToAnsi(pCharExeFull));//执行程序
+	string sExeFull;
+	sExeFull = sPath;
+	if (sPath[sPath.size() - 1] != '\\')sExeFull += "\\";//补全路径末尾反斜杠
+	sExeFull += sExename;
+	system(sExeFull.c_str());//执行程序
 	
 	//读入输出文件
-	ifstream fin(UnicodeToAnsi(pCharIoname+_T(".out")));//文件流
+	ifstream fin(sIoname + sOutputFileName);//文件流
 	CString pCharOutput;
 	char ss[1024];
 	pCharOutput = _T("");
@@ -154,6 +163,7 @@ void CtestDlg::OnBnClickedOk()
 		ssss += _T("\r\n");
 		pCharOutput += ssss;
 	}//读入
+	CEdit* pEdit;
 	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_output);
 	pEdit->SetWindowText(pCharOutput);//设置输出控件值
 	fin.close();//关闭文件
@@ -161,8 +171,8 @@ void CtestDlg::OnBnClickedOk()
 	//生成删除临时文件脚本
 	ofstream fout2("temp.bat");
 	fout2 << "@echo off" << endl;
-	fout2 << "del \"" << UnicodeToAnsi(pCharIoname + _T(".in")) << "\"" << endl;
-	fout2 << "del \"" << UnicodeToAnsi(pCharIoname + _T(".out")) << "\"" << endl;
+	fout2 << "del \"" << sIoname + sInputFileName << "\"" << endl;
+	fout2 << "del \"" << sIoname + sOutputFileName << "\"" << endl;
 	fout2.close();
 	system("temp.bat");//执行
 	system("del temp.bat");//删除脚本
@@ -199,6 +209,7 @@ void CtestDlg::OnBnClickedButtonChange()
 	pDlg->ShowWindow(SW_SHOWNORMAL); //显示非模态对话框  
 }
 
+
 BOOL CtestDlg::PreTranslateMessage(MSG* pMsg)
 {
 	if (pMsg->message == WM_KEYDOWN)
@@ -224,6 +235,7 @@ void CtestDlg::OnClose()
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 
+	//_save();
 	CDialogEx::OnClose();
 	exit(0);
 }
@@ -240,7 +252,7 @@ void CtestDlg::OnEnChangeEditpath()
 	CString ss;
 	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_path);
 	pEdit->GetWindowText(ss);
-	string sPath = UnicodeToAnsi(ss);
+	sPath = UnicodeToAnsi(ss);
 }
 
 
@@ -256,4 +268,71 @@ void CtestDlg::OnEnChangeEditexename()
 	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_exename);
 	pEdit->GetWindowText(ss);
 	sExename = UnicodeToAnsi(ss);
+}
+
+
+void CtestDlg::OnEnChangeEditioname()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
+	CString ss;
+	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_ioname);
+	pEdit->GetWindowText(ss);
+	sIoname = UnicodeToAnsi(ss);
+
+}
+
+
+void CtestDlg::OnCbnEditchangeComboInputfilename()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CString ss;
+	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_COMBO_INPUTFILENAME);
+	pEdit->GetWindowText(ss);
+	sInputFileName = UnicodeToAnsi(ss);
+}
+
+
+void CtestDlg::OnCbnEditchangeComboOutputfilename()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CString ss;
+	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_COMBO_OUTPUTFILENAME);
+	pEdit->GetWindowText(ss);
+	sOutputFileName = UnicodeToAnsi(ss);
+}
+
+
+void CtestDlg::OnEnChangeEditinput()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
+	CString ss;
+	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_input);
+	pEdit->GetWindowText(ss);
+	sInput = UnicodeToAnsi(ss);
+
+}
+
+
+void CtestDlg::OnEnChangeEditoutput()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
+	CString ss;
+	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_output);
+	pEdit->GetWindowText(ss);
+	sOutputFileName = UnicodeToAnsi(ss);
 }

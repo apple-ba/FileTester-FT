@@ -204,6 +204,7 @@
     <ClCompile Include="test.cpp" />
     <ClCompile Include="testDlg.cpp" />
     <ClCompile Include="testing.cpp" />
+    <ClCompile Include="variables.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="test.rc" />
